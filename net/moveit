@@ -1,0 +1,1 @@
+scp -P 21098 jpd sltuch@jld2.net:public_html/cgi-bin

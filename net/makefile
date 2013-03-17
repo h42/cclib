@@ -1,0 +1,36 @@
+CPPFLAGS=-g -Wall
+CC=g++
+
+PROGS=jsockc jsocks jftp demon jntp
+
+all:$(PROGS)
+
+jsock.o jsock.h:jsock.cc
+	ccinc <jsock.cc >jsock.h
+	g++ -c $(CPPFLAGS) jsock.cc
+
+jsockc:jsock.o jsock_c.cc
+	g++ $(CPPFLAGS) jsock.o jsock_c.cc -ojsockc
+
+jsocks:jsock.o jsock_s.cc
+	g++ $(CPPFLAGS) jsock.o jsock_s.cc -ojsocks
+
+jntp:jsock.o jntp.cc
+	g++ $(CPPFLAGS) jsock.o jntp.cc -ojntp
+
+## JFTP
+jftp.o jftp.h:jftp.cc
+	ccinc <jftp.cc >jftp.h
+	g++ -c $(CPPFLAGS) jftp.cc
+
+jftp:jftp.o jftp_t.cc jsock.o
+	g++ $(CPPFLAGS) jftp.o jsock.o jftp_t.cc -ojftp
+
+## INSTALL
+install:jsock.o
+	mkdir -p ../lib
+	cp -av jsock.h ../lib/jsock.h
+	cp -av jsock.o ../lib/jsock.o
+
+clean:
+	-rm *.o $(PROGS)
