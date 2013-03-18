@@ -11,6 +11,8 @@
 #ifndef _JSTRING_H
 #define _JSTRING_H
 
+#include <stdio.h>
+
 class jstring {
 public:
     jstring(const char *s,int ilen=0);

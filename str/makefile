@@ -1,7 +1,7 @@
-CPPFLAGS=-g -Wall
+CPPFLAGS=-g -Wall -I .
 CC=g++
 
-CLASS=jstring
+CLASS=str
 
 PROGS=jpd
 
@@ -13,7 +13,7 @@ PROGS=jpd
 
 all:$(PROGS)
 
-jpd:jpd.cc jstring.o
+jpd:jpd.cc str.o
 	g++ $(CPPFLAGS) jpd.cc $(CLASS).o -ojpd
 
 $(CLASS).o:$(CLASS).cc
