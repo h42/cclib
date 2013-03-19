@@ -13,7 +13,7 @@ PROGS=jpd
 
 all:$(PROGS)
 
-jpd:jpd.cc str.o
+jpd:jpd.cc $(CLASS).o
 	g++ $(CPPFLAGS) jpd.cc $(CLASS).o -ojpd
 
 $(CLASS).o:$(CLASS).cc
@@ -21,6 +21,7 @@ $(CLASS).o:$(CLASS).cc
 	g++ -c $(CPPFLAGS) $(CLASS).cc -o $(CLASS).o
 
 install:
+	install -m644 $(CLASS).cc ../lib
 
 clean:
 	-rm *.o $(PROGS)

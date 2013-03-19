@@ -13,14 +13,11 @@ PROGS=jpd
 
 all:$(PROGS)
 
-jpd:jpd.cc $(CLASS).o
-	g++ $(CPPFLAGS) jpd.cc $(CLASS).o -ojpd
-
-$(CLASS).o:$(CLASS).cc
-	awkinc < $(CLASS).cc  >$(CLASS).h
-	g++ -c $(CPPFLAGS) $(CLASS).cc -o $(CLASS).o
+jpd:jpd.cc $(CLASS).cc
+	g++ $(CPPFLAGS) jpd.cc -ojpd
 
 install:
+	install -m644 $(CLASS).cc ../lib
 
 clean:
 	-rm *.o $(PROGS)

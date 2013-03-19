@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <time.h>
-#include "vec.cc"
+#include "my/vec.cc"
 //#include "jstring.h"
 
 //template class vec<int>;

@@ -1,22 +1,21 @@
 CPPFLAGS=-g -Wall
 CC=g++
 
-OBJS=sql.o
+OBJS=str.o
+INCS=str.h vec.cc
 
-all:ccinc $(OBJS)
+%.o : %.cc
+	awkinc < $<  > $(@:.o=.h)
+	$(CC) -c $(CPPFLAGS) -o $@ $<
 
-ccinc:ccinc.c
-
-sql.o:sql.cc
-	ccinc <sql.cc >sql.h
-	g++ -c $(CPPFLAGS) sql.cc -osql.o
+all:$(OBJS)
 
 clean:
-	-rm *.o *.h $(PROGS) ccinc
+	-rm *.o *.h $(PROGS)
 
 install:
-	-rm libjlib.a
-	ar qs libjlib.a $(OBJS)
-	install -v -ojerry -gjerry libjlib.a /usr/local/lib
-	install -d -v /usr/local/include/jlib
-	install -v -ojerry -gjerry *.h /usr/local/include/jlib
+	-rm libmy.a
+	ar qs libmy.a $(OBJS)
+	install -v -ojerry -gjerry libmy.a /usr/local/lib
+	install -d -v /usr/local/include/my
+	install -v -ojerry -gjerry $(INCS) /usr/local/include/my
