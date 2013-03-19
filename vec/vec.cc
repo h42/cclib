@@ -2,14 +2,14 @@
 #include <stdlib.h>
 
 //ccinclude
-#ifndef _JVEC_H
-#define _JVEC_H
+#ifndef _VEC_H
+#define _VEC_H
 template <class T>
-class jvec {
+class vec {
 public:
-    jvec<T>();
-    jvec<T>(int n);
-    ~jvec() {delete []zbuf;}
+    vec<T>();
+    vec<T>(int n);
+    ~vec() {delete []zbuf;}
     void grow();
     void grow(int x);
     T& get(int x);
@@ -29,44 +29,44 @@ private:
 //ccinclude
 
 template <class T>
-int jvec<T>::sp() {
+int vec<T>::sp() {
     return zsp;
 }
 
 template <class T>
-void jvec<T>::sp(T x) {
+void vec<T>::sp(T x) {
     zsp=x;
 }
 
 template <class T>
-void jvec<T>::push(T &x) {
+void vec<T>::push(T &x) {
     if (zsp > zsize) grow();
     zbuf[zsp++]=x;
 }
 
 template <class T>
-T &jvec<T>::pop() {
+T &vec<T>::pop() {
     --zsp;
     if (zsp<0) throw "Stack underflow";
     return zbuf[--zsp];
 }
 
 template <class T>
-jvec<T>::jvec() {
+vec<T>::vec() {
     zsp=0;
     zsize=0;
     zbuf=0;
 }
 
 template <class T>
-jvec<T>::jvec(int x) {
+vec<T>::vec(int x) {
     zbuf=new T[x];
     zsize=x;
     zsp=0;
 }
 
 template <class T>
-void jvec<T>::grow() {
+void vec<T>::grow() {
     zsize*=2;
     int n2 = zsize * 2;
     T *buf2 = new T[n2];
@@ -77,7 +77,7 @@ void jvec<T>::grow() {
 }
 
 template <class T>
-void jvec<T>::grow(int x) {
+void vec<T>::grow(int x) {
     if (zsize>=x) return;
     if (x<2) x=2;
     T *buf2 = new T(x);
@@ -88,19 +88,19 @@ void jvec<T>::grow(int x) {
 }
 
 template <class T>
-T& jvec<T>::get(int x) {
+T& vec<T>::get(int x) {
     if (x<0 || x>=zsize) throw "subscript out of bounds";
     return zbuf[x];
 }
 
 template <class T>
-T& jvec<T>::operator[](int x) {
+T& vec<T>::operator[](int x) {
     if (x<0 || x>=zsize) throw "subscript out of bounds";
     return zbuf[x];
 }
 
 template <class T>
-void jvec<T>::put(T &v,int x) {
+void vec<T>::put(T &v,int x) {
     if (x<0 || x>=zsize) throw "subscript out of bounds";
     zbuf[x]=v;
 }
