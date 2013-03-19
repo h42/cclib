@@ -8,17 +8,18 @@
 #include <ctype.h>
 
 //ccinclude
-#ifndef _JSTRING_H
-#define _JSTRING_H
-
+#ifndef _STR_H
+#define _STR_H
+#ifndef _STDIO_H
 #include <stdio.h>
+#endif
 
-class jstring {
+class str {
 public:
-    jstring(const char *s,int ilen=0);
-    jstring(const int ilen=0);
-    jstring(const jstring &s);
-    ~jstring();
+    str(const char *s,int ilen=0);
+    str(const int ilen=0);
+    str(const str &s);
+    ~str();
     int center(int x=0);
     char *cstr() {return zbuf;};
     void display() {::puts(zbuf);}
@@ -26,15 +27,15 @@ public:
     int find(const char *str,int x=0,int icase=0);
     void grow(int l);
     int  length() {return zlen;};
-    jstring &concat(const jstring &s);
-    jstring &concat(char c);
-    jstring &copy(const jstring &s);
-    jstring &copy(const char *s);
-    jstring &operator=(const jstring &s);
-    jstring &operator=(const char *s);
-    jstring operator+(char c);
-    jstring operator+(const jstring &s2);
-    friend jstring operator+(const char *s,const jstring &s1);
+    str &concat(const str &s);
+    str &concat(char c);
+    str &copy(const str &s);
+    str &copy(const char *s);
+    str &operator=(const str &s);
+    str &operator=(const char *s);
+    str operator+(char c);
+    str operator+(const str &s2);
+    friend str operator+(const char *s,const str &s1);
     int format(const char *fmt,...);
     int change(const char *,int x=0,int l1=0,int l2=0);
     int trim(int x=3);
@@ -51,7 +52,7 @@ private:
 //
 // Constructor / destructor
 //
-jstring::jstring(const char *s,int ilen) {
+str::str(const char *s,int ilen) {
     int l=strlen(s);
     if (l+1>ilen) ilen=l+1;
     zsize=0; //req for initial malloc
@@ -63,7 +64,7 @@ jstring::jstring(const char *s,int ilen) {
     //::printf("zbuf=%p\n",zbuf);
 }
 
-jstring::jstring(int size) {
+str::str(int size) {
     zlen=0;
     if (size<=0) size=80;
     zbuf=0;
@@ -74,7 +75,7 @@ jstring::jstring(int size) {
     //::printf("buf=%p\n",zbuf);
 }
 
-jstring::jstring(const jstring &s) {
+str::str(const str &s) {
     zlen=s.zlen;
     zbuf=0;
     zsize=0; //req for initial malloc
@@ -84,7 +85,7 @@ jstring::jstring(const jstring &s) {
     //::printf("buf=%p\n",zbuf);
 }
 
-jstring::~jstring() {
+str::~str() {
     if (zbuf) {
 	free(zbuf);
 	zbuf=0;
@@ -94,7 +95,7 @@ jstring::~jstring() {
 //////////////
 // CONCAT
 //////////////
-jstring & jstring::concat(const jstring &s) {
+str & str::concat(const str &s) {
     int l=zlen+s.zlen;
     if (zsize<l+1) grow(l+1);
     if (zsize<l+1) return *this;
@@ -104,7 +105,7 @@ jstring & jstring::concat(const jstring &s) {
     return *this;
 }
 
-jstring &jstring::concat(char c) {
+str &str::concat(char c) {
     int l=zlen+1;
     if (zsize<l+1) grow(l+1);
     if (zsize<l+1) return *this;
@@ -116,7 +117,7 @@ jstring &jstring::concat(char c) {
 //////////////
 // CENTER
 //////////////
-int jstring::center(int x) {
+int str::center(int x) {
     if (x<=0) x=zsize-1;
     if (zsize<=0 || x>=zsize-1) return -1;
     if (zlen<=0 || zlen==x) return 0;
@@ -137,7 +138,7 @@ int jstring::center(int x) {
 //////////////
 // COPY
 //////////////
-jstring &jstring::copy(const jstring &s) {
+str &str::copy(const str &s) {
     if (&s == this) return *this;
     if (zsize<s.zlen+1) grow(s.zlen+1);
     if (zsize<s.zlen+1) return *this;
@@ -147,7 +148,7 @@ jstring &jstring::copy(const jstring &s) {
     return *this;
 }
 
-jstring &jstring::copy(const char *str1) {
+str &str::copy(const char *str1) {
     int l=strlen(str1);
     if (zsize<l+1) grow(l+1);
     if (zsize<l+1) return *this;
@@ -159,7 +160,7 @@ jstring &jstring::copy(const char *str1) {
 //
 // FIND
 //
-int jstring::find(const char *str,int x,int icase) {
+int str::find(const char *str,int x,int icase) {
     if (x>=zlen) return -1;
     char *cp;
     cp=(!icase)?strstr(&zbuf[x],str):strcasestr(&zbuf[x],str);
@@ -169,7 +170,7 @@ int jstring::find(const char *str,int x,int icase) {
 //
 // GROW
 //
-void jstring::grow(int l) {
+void str::grow(int l) {
     if (zsize<=0) zbuf=(char *)malloc(l);
     else zbuf=(char *)realloc(zbuf,l);
     if (!zbuf) zlen=zsize=0;
@@ -179,7 +180,7 @@ void jstring::grow(int l) {
 ///////////////////
 // operator
 ///////////////////
-jstring &jstring::operator=(const jstring &s) {
+str &str::operator=(const str &s) {
     if (&s == this) return *this;
     if (zsize<s.zlen+1) grow(s.zlen+1);
     if (zsize<s.zlen+1) return *this;
@@ -189,7 +190,7 @@ jstring &jstring::operator=(const jstring &s) {
     return *this;
 }
 
-jstring &jstring::operator=(const char *str1) {
+str &str::operator=(const char *str1) {
     int l=strlen(str1);
     if (zsize<l+1) grow(l+1);
     if (zsize<l+1) return *this;
@@ -198,8 +199,8 @@ jstring &jstring::operator=(const char *str1) {
     return *this;
 }
 
-jstring jstring::operator+(const jstring &s2) {
-    jstring s0;
+str str::operator+(const str &s2) {
+    str s0;
     int l=zlen+s2.zlen;
     s0.zbuf=(char *)malloc(l+1);
     if (!s0.zbuf) return s0;
@@ -211,7 +212,7 @@ jstring jstring::operator+(const jstring &s2) {
     return s0;
 }
 
-jstring jstring::operator+(char c) { // DANGEROUS - YOU MUST ADD ZERO
+str str::operator+(char c) { // DANGEROUS - YOU MUST ADD ZERO
     int l=zlen+1;
     if (zsize<l+1) grow(l+1);
     if (zsize<l+1) return *this;
@@ -219,8 +220,8 @@ jstring jstring::operator+(char c) { // DANGEROUS - YOU MUST ADD ZERO
     return *this;
 }
 
-jstring operator+(const char *s1,const jstring &s2) {
-    jstring s0;
+str operator+(const char *s1,const str &s2) {
+    str s0;
     int s1l=strlen(s1);
     int l = s1l + s2.zlen;
     s0.zbuf=(char *)malloc(l+1);
@@ -236,7 +237,7 @@ jstring operator+(const char *s1,const jstring &s2) {
 //
 // PRINTF
 //
-int jstring::format(const char *fmt,...) {
+int str::format(const char *fmt,...) {
     va_list ap;
     if (zsize==0) return -1;
     va_start(ap,fmt);
@@ -249,7 +250,7 @@ int jstring::format(const char *fmt,...) {
 //
 // REPLACE
 //
-int jstring::change(const char *str,int x,int l1,int l2) {
+int str::change(const char *str,int x,int l1,int l2) {
     if (l2<=0) l2=strlen(str);
     if (l1<=0) l1=l2;
     if (zlen+l2-l1>=zsize) return -1;
@@ -261,7 +262,7 @@ int jstring::change(const char *str,int x,int l1,int l2) {
 //
 // TRIM
 //
-int jstring::trim(int x) {
+int str::trim(int x) {
     if (zlen<=0) return -1;
     int i;
     if (x&1) {
