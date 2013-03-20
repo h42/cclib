@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include "jstring.h"
+#include "../str/str.h"
 #include "jfile.h"
 
 int main() {
-    jstring s;
+    str s;
     jfile f1("/etc/passwd");
     while (f1.gets(s)>0) {
 	puts(s.cstr());

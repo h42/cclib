@@ -1,34 +1,29 @@
 
-PROGS=lexer jpd jvec_t jfile_t mime
-OBJS=jstring.o jfile.o
+CPPFLAGS=-g -Wall -static
+
+PROGS=jpd
+#OBJS=jfile.o
 
 .PHONY: ALL
 
-ALL:ccinc $(OBJS) $(PROGS)
-
-ccinc:ccinc.c
-
-jstring.o:jstring.cc jstring.h
-	ccinc <jstring.cc >jstring.h
-	g++ -Wall -g -c jstring.cc -ojstring.o
-jstring_t:jstring_t.cc jstring.o
+ALL:$(OBJS) $(PROGS)
 
 jfile.o:jfile.cc jfile.h
-	ccinc <jfile.cc >jfile.h
+	awkinc <jfile.cc >jfile.h
 	g++ -Wall -g -c jfile.cc -ojfile.o
 jfile_t:jfile_t.cc jfile.o jstring.o
 
-jpd:jpd.cc jstring.o jvec.cc
-	g++ -Wall -g jpd.cc jstring.o -ojpd
+jpd:jpd.cc
+	g++ $(CPPFLAGS) jpd.cc -ojpd
 
 lexer:lexer.cc jstring.o jvec.cc
 	g++ -Wall -g lexer.cc jstring.o -olexer
 
-jvec_t:jvec_t.cc jstring.o jvec.cc
-	g++ -Wall -g jvec_t.cc jstring.o -ojvec_t
-
 mime:mime.cc
 	g++ -Wall -g mime.cc -omime
+
+install:jpd
+	install -m755 jpd /srv/http/cgi-bin/jpd
 
 clean:
 	-rm -v *.o $(PROGS)

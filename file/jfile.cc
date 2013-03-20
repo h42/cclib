@@ -4,14 +4,15 @@
 #include <fcntl.h>
 #include <malloc.h>
 #include <stdarg.h>
-#include "jstring.h"
 
 //ccinclude
 #ifndef _JFILE_H
 #define _JFILE_H
+
 #ifndef _JSTRING_H
-#include "jlib/jstring.h"
+#include <my/str.h>
 #endif
+
 #include <fcntl.h>
 class jfile {
     private:
@@ -23,15 +24,15 @@ class jfile {
 	~jfile(void) {close();};
 	int open(char *fn,int flags=O_RDONLY,int mode=0664);
 	int close();
-	int gets(jstring &);
-	int puts(jstring &);
+	int gets(str &);
+	int puts(str &);
 	int printf(char *,...);
 	int read(char *,int);
-	int read(jstring);
+	int read(str);
 	int read();
 	long seek(long, int=0);
 	int write(char *, int);
-	int write(jstring);
+	int write(str);
 };
 #endif
 //ccinclude
@@ -80,7 +81,7 @@ int jfile::close() {
 //
 // PUTS / GETS
 //
-int jfile::puts(jstring &s) {
+int jfile::puts(str &s) {
     int l=s.length(),rc;
     char nl=10;
     if (fd<0) return -1;
@@ -88,7 +89,7 @@ int jfile::puts(jstring &s) {
     return ::write(fd,&nl,1);
 }
 
-int jfile::gets(jstring &s) {
+int jfile::gets(str &s) {
     int c,sp1=0,cr=0;
     if (fd<0) return -1;
     size=size2=512;
@@ -147,11 +148,11 @@ int jfile::read(char *ibuf,int ilen) {
     return (fd>=0) ? ::read(fd,ibuf,ilen) : -1;
 }
 
-int jfile::read(jstring s) {
+int jfile::read(str s) {
     return (fd>=0) ? ::read(fd,s.cstr(),s.length()) : -1;
 }
 
-int jfile::write(jstring s) {
+int jfile::write(str s) {
     return (fd>=0) ? ::write(fd,s.cstr(),s.length()) : -1;
 }
 
