@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <malloc.h>
@@ -9,7 +10,7 @@
 #ifndef _JFILE_H
 #define _JFILE_H
 
-#ifndef _JSTRING_H
+#ifndef _STR_H
 #include <my/str.h>
 #endif
 
@@ -20,12 +21,13 @@ class jfile {
 	char *buf,*buf2;
 	int  fd,size,size2,p1,p2;
     public:
-	jfile(const char *fn=0,char *mode=0);
+	jfile(const char *fn=0,const char *mode=0);
 	~jfile(void) {close();};
 	int open(char *fn,int flags=O_RDONLY,int mode=0664);
 	int close();
 	int gets(str &);
 	int puts(str &);
+	int puts(const char *s);
 	int printf(char *,...);
 	int read(char *,int);
 	int read(str);
@@ -47,7 +49,7 @@ static int jgrow(void **buf,int *size) {
     return 0;
 }
 
-jfile::jfile(const char *ifn,char *mode) {
+jfile::jfile(const char *ifn, const char *mode) {
     char *fn = (char *)ifn;
     fd=-1;
     size=size2=0;
@@ -86,6 +88,14 @@ int jfile::puts(str &s) {
     char nl=10;
     if (fd<0) return -1;
     if (l>0) if ((rc=::write(fd,s.cstr(),l))) return rc;
+    return ::write(fd,&nl,1);
+}
+
+int jfile::puts(const char *s) {
+    int l=strlen(s),rc;
+    char nl=10;
+    if (fd<0) return -1;
+    if (l>0) if ((rc=::write(fd,s,l))) return rc;
     return ::write(fd,&nl,1);
 }
 
@@ -140,26 +150,26 @@ int jfile::printf(char *fmt,...) {
 //
 // READ / WRITE
 //
-int jfile::read() {
+/*int jfile::read() {
     return 0;
-}
+}*/
 
-int jfile::read(char *ibuf,int ilen) {
+inline int jfile::read(char *ibuf,int ilen) {
     return (fd>=0) ? ::read(fd,ibuf,ilen) : -1;
 }
 
-int jfile::read(str s) {
+inline int jfile::read(str s) {
     return (fd>=0) ? ::read(fd,s.cstr(),s.length()) : -1;
 }
 
-int jfile::write(str s) {
+inline int jfile::write(str s) {
     return (fd>=0) ? ::write(fd,s.cstr(),s.length()) : -1;
 }
 
-int jfile::write(char *obuf, int olen) {
+inline int jfile::write(char *obuf, int olen) {
     return (fd>=0) ? ::write(fd,obuf,olen) : -1;
 }
 
-long jfile::seek(long offset, int whence) {
+inline long jfile::seek(long offset, int whence) {
     return lseek(fd, offset, whence);
 }
