@@ -212,11 +212,12 @@ str str::operator+(const str &s2) {
     return s0;
 }
 
-str str::operator+(char c) { // DANGEROUS - YOU MUST ADD ZERO
+str str::operator+(char c) {
     int l=zlen+1;
-    if (zsize<l+1) grow(l+1);
+    if (zsize<l+1) grow(zsize*2);
     if (zsize<l+1) return *this;
     zbuf[zlen++]=c;
+    zbuf[zlen]=0;
     return *this;
 }
 

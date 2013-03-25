@@ -14,6 +14,7 @@ PROGS=jpd
 all:$(PROGS)
 
 jpd:jpd.cc $(CLASS).cc
+	awkinc < $(CLASS).cc > $(CLASS).h
 	g++ $(CPPFLAGS) jpd.cc -ojpd
 
 install:

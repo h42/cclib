@@ -3,21 +3,11 @@
 #include <malloc.h>
 #include <time.h>
 #include "my/vec.cc"
-//#include "jstring.h"
 
+//#include "jstring.h"
 //template class vec<int>;
 
-using namespace std;
-
 int cnt=5;
-
-class xxx {
-public:
-    int x,y,z;
-    xxx() { puts("contructing xxx"); x=0; y=0; z=0; }
-    ~xxx() { puts("deconstructing"); }
-    void inc(int i) { x+=i; y+=i; z+=i; }
-};
 
 int sub1() {
     int i;
@@ -36,6 +26,14 @@ int sub1() {
 
     return 0;
 }
+
+class xxx {
+public:
+    int x,y,z;
+    xxx() { puts("contructing xxx"); x=0; y=0; z=0; }
+    ~xxx() { puts("deconstructing"); }
+    void inc(int i) { x+=i; y+=i; z+=i; }
+};
 
 int sub2() {
     int i;
@@ -58,7 +56,15 @@ int sub2() {
 void sub3() {
     vec<int> iv;
     iv.grow(32);
-    printf("size=%d\n",iv.size());
+    printf("sub3 size=%d\n",iv.size());
+}
+
+void trev() {
+    int n=5;
+    vec<int> vi(n);
+    for (int i=0;i<n;i++) vi[i]=i;
+    vi.reverse(n);
+    for (int i=0;i<n;i++) printf("vi[%d]=%d %p\n",i,vi[i],&vi[i]);
 }
 
 int main() {
@@ -67,5 +73,7 @@ int main() {
     sub2();
     putchar(10);
     sub3();
+    putchar(10);
+    trev();
     return 0;
 }
