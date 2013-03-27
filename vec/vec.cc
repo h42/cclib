@@ -5,6 +5,7 @@
 #define _VEC_H
 
 #include <stdlib.h>
+#include <string.h>
 #include <new>
 
 template <class T>
@@ -25,8 +26,9 @@ public:
     void sp(T);
     // ALGORITHMS
     void reverse(int n=0);
+    void msort(T *b=0, int l=0, int r=-1);
 private:
-    T *zbuf;
+    T *zv;
     int zsize,zsp;
 };
 #endif
@@ -34,9 +36,9 @@ private:
 
 template <class T>
 vec<T>::~vec() {
-    if (zbuf) {
-	for (int i=0;i<zsize;i++) (zbuf+i)->~T();
-	free(zbuf);
+    if (zv) {
+	for (int i=0;i<zsize;i++) (zv+i)->~T();
+	free(zv);
     }
 }
 
@@ -44,15 +46,15 @@ template <class T>
 vec<T>::vec() {
     zsp=0;
     zsize=0;
-    zbuf=0;
+    zv=0;
 }
 
 template <class T>
 vec<T>::vec(int x) {
     zsize=x;
     zsp=0;
-    zbuf = (T *) malloc(x*sizeof(T));
-    for (int i=0;i<x;i++) new(zbuf+i) T();
+    zv = (T *) malloc(x*sizeof(T));
+    for (int i=0;i<x;i++) new(zv+i) T();
 }
 
 template <class T>
@@ -64,30 +66,30 @@ void vec<T>::grow(int x) {
     if (zsize>=x) return;
 
     T* buf2;
-    if (zbuf) buf2 = (T *)realloc(zbuf,x*sizeof(T));
+    if (zv) buf2 = (T *)realloc(zv,x*sizeof(T));
     else buf2 = (T *)malloc(x*sizeof(T));
 
-    zbuf=buf2;
-    for (int i=zsize;i<x;i++) new(zbuf+i) T();
+    zv=buf2;
+    for (int i=zsize;i<x;i++) new(zv+i) T();
     zsize=x;
 }
 
 template <class T>
 T& vec<T>::get(int x) {
     if (x<0 || x>=zsize) throw "subscript out of bounds";
-    return zbuf[x];
+    return zv[x];
 }
 
 template <class T>
 T& vec<T>::operator[](int x) {
     if (x<0 || x>=zsize) throw "subscript out of bounds";
-    return zbuf[x];
+    return zv[x];
 }
 
 template <class T>
 void vec<T>::put(T &v,int x) {
     if (x<0 || x>=zsize) throw "subscript out of bounds";
-    zbuf[x]=v;
+    zv[x]=v;
 }
 
 //
@@ -106,14 +108,14 @@ void vec<T>::sp(T x) {
 template <class T>
 void vec<T>::push(T &x) {
     if (zsp > zsize) grow();
-    zbuf[zsp++]=x;
+    zv[zsp++]=x;
 }
 
 template <class T>
 T &vec<T>::pop() {
     --zsp;
     if (zsp<0) throw "Stack underflow";
-    return zbuf[--zsp];
+    return zv[--zsp];
 }
 
 //
@@ -126,9 +128,32 @@ void vec<T>::reverse(int n) {
     printf("n=%d n2=%d\n",n,n2);
     T t;
     for (int i=0;i<n2;i++) {
-	t=zbuf[i];
-	zbuf[i]=zbuf[n-1-i];
-	zbuf[n-1-i]=t;
-	printf("i=%d v[%d]=%d %p\n",i,i,zbuf[i],&zbuf[i]);
+	t=zv[i];
+	zv[i]=zv[n-1-i];
+	zv[n-1-i]=t;
+	printf("i=%d v[%d]=%d %p\n",i,i,zv[i],&zv[i]);
+    }
+}
+
+template <class T>
+void vec<T>::msort(T *b, int l, int r) {
+    int i,j,k,m;
+    if (r<0) r=zsize-1;
+    if (!b) b=(T *)malloc(zsize*sizeof(T));
+    if (r<=l) return;
+    m = (r + l) / 2;
+    msort(b, l, m);
+    msort(b, m+1, r);
+
+    // time =0.04
+    memcpy(&b[l],&zv[l],(m-l+1)*sizeof(T));
+    memcpy(&b[m+1],&zv[m+1],(r-m)*sizeof(T));
+    k=i=l;
+    j=m+1;
+    while (k<=r) {
+	if (i>m) memcpy(&zv[k++], &b[j++], sizeof(T));
+	else if (j>r) memcpy(&zv[k++], &b[i++], sizeof(T));
+	else if (b[i]<b[j]) memcpy(&zv[k++], &b[i++], sizeof(T));
+	else memcpy(&zv[k++], &b[j++], sizeof(T));
     }
 }

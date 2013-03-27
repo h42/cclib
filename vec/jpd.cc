@@ -67,7 +67,19 @@ void trev() {
     for (int i=0;i<n;i++) printf("vi[%d]=%d %p\n",i,vi[i],&vi[i]);
 }
 
+void mmsort() {
+    const int N = 200000;
+    vec<int> v(N);
+    srand(7);
+    for (int i=0;i<v.size();i++) v[i]=rand() % 1000000;
+
+    for (int i=0; i<5; i++) printf("%d\n",v[i]);
+    v.msort();
+    for (int i=0; i<5; i++) printf("%d\n",v[i]);
+}
+
 int main() {
+    /*
     sub1();
     putchar(10);
     sub2();
@@ -75,5 +87,8 @@ int main() {
     sub3();
     putchar(10);
     trev();
+    putchar(10);
+    */
+    mmsort();
     return 0;
 }
