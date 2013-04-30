@@ -1,7 +1,7 @@
 
-CPPFLAGS=-g -Wall -static
+CPPFLAGS=-g -Wall -I ../lib -L ../lib
 
-PROGS=jpd
+PROGS=jpd html
 #OBJS=jfile.o
 
 .PHONY: ALL
@@ -14,7 +14,7 @@ jfile.o:jfile.cc jfile.h
 jfile_t:jfile_t.cc jfile.o jstring.o
 
 jpd:jpd.cc
-	g++ $(CPPFLAGS) jpd.cc -ojpd
+	g++ $(CPPFLAGS) jpd.cc -lmy -ojpd
 
 lexer:lexer.cc jstring.o jvec.cc
 	g++ -Wall -g lexer.cc jstring.o -olexer

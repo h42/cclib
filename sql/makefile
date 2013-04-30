@@ -1,4 +1,4 @@
-CPPFLAGS=-g -Wall
+CPPFLAGS=-g -Wall #-static
 CC=g++
 
 PROGS=ccinc jpd jpd2

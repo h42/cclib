@@ -35,6 +35,7 @@ public:
     str &operator=(const char *s);
     str operator+(char c);
     str operator+(const str &s2);
+    char operator[](int);
     friend str operator+(const char *s,const str &s1);
     int format(const char *fmt,...);
     int change(const char *,int x=0,int l1=0,int l2=0);
@@ -233,6 +234,10 @@ str operator+(const char *s1,const str &s2) {
     if (s2.zlen) memcpy(&s0.zbuf[s1l],s2.zbuf,s2.zlen);
     s0.zbuf[l]=0;
     return s0;
+}
+
+char str::operator[](int i) {
+    return zbuf[i];
 }
 
 //

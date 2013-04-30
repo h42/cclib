@@ -25,8 +25,11 @@ public:
     int sp();
     void sp(T);
     // ALGORITHMS
+    void insertion_sort(int l=0, int r=0);
+    bool is_sorted(int l=0, int r=0);
+    void merge_sort(T *b=0, int l=0, int r=-1);
     void reverse(int n=0);
-    void msort(T *b=0, int l=0, int r=-1);
+    int search(T &x, int n=0);
 private:
     T *zv;
     int zsize,zsp;
@@ -135,15 +138,22 @@ void vec<T>::reverse(int n) {
     }
 }
 
+// Heap Sort
 template <class T>
-void vec<T>::msort(T *b, int l, int r) {
-    int i,j,k,m;
+void vec<T>::merge_sort(T *b, int l, int r) {
+    int i,j,k,m,toplevel=0;
     if (r<0) r=zsize-1;
-    if (!b) b=(T *)malloc(zsize*sizeof(T));
-    if (r<=l) return;
+    if (!b) {
+	b=(T *)malloc(zsize*sizeof(T));
+	toplevel=1;
+    }
+
+    if (r<=l) return; // required for straight merge_sort - insertion_sort opt negates need
+    if (r<=16) return insertion_sort(l,r);
+
     m = (r + l) / 2;
-    msort(b, l, m);
-    msort(b, m+1, r);
+    merge_sort(b, l, m);
+    merge_sort(b, m+1, r);
 
     // time =0.04
     memcpy(&b[l],&zv[l],(m-l+1)*sizeof(T));
@@ -156,4 +166,47 @@ void vec<T>::msort(T *b, int l, int r) {
 	else if (b[i]<b[j]) memcpy(&zv[k++], &b[i++], sizeof(T));
 	else memcpy(&zv[k++], &b[j++], sizeof(T));
     }
+    if (toplevel) free(b);
+}
+
+// Insertion Sort
+template <class T>
+void vec<T>::insertion_sort(int l, int r) {
+    if (r==0) r=zsize-1;
+    int i,j,t;
+    for (i=l+1;i<=r;i++) {
+	t=zv[i];
+	for (j=i-1;j>=l;j--) {
+	    if (t >= zv[j] || j==l) {
+		if (j==i-1) break;
+		if (t < zv[j]) j--;
+		memmove(&zv[j+2], &zv[j+1], (i-j-1)*sizeof(T));
+		zv[j+1]=t;
+		break;
+	    }
+	}
+    }
+}
+
+// IS_SORTED
+template <class T>
+bool vec<T>::is_sorted(int l, int r) {
+    if (r==0) r=zsize-1;
+    if (l>=r || l<0 || r>=zsize) throw "is_sorted: bad parameters";
+    for (int i=l; i<r; i++) if (zv[i]>zv[i+1]) return false;
+    return true;
+}
+
+// SEARCH
+template <class T>
+int vec<T>::search(T &x, int n) {
+    if (n==0) n=zsize;
+    int l=0, r=n, m=-1;
+    while (m!=l) {
+	m=(r-l)/2;
+	if (zv[m]==x) return m;
+	else if (zv[m]<x) r=m;
+	else l=m;
+    }
+    throw("Search failed");
 }

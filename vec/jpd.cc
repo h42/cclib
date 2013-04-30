@@ -67,19 +67,48 @@ void trev() {
     for (int i=0;i<n;i++) printf("vi[%d]=%d %p\n",i,vi[i],&vi[i]);
 }
 
-void mmsort() {
-    const int N = 200000;
+void test_mergesort() {
+    const int N = 1000000;
+    vec<int> v(N);
+    srand(7);
+
+    for (int i=0;i<v.size();i++) v[i]=rand() % 1000000;
+    //for (int i=0;i<v.size();i++) v[i]=i;;
+
+    for (int i=0; i<5; i++) printf("%d\n",v[i]);
+    v.merge_sort();
+    for (int i=0; i<5; i++) printf("%d\n",v[i]);
+    printf("is_sorted = %d\n", v.is_sorted());
+}
+
+void test_insertion_sort() {
+    const int N = 1000;
     vec<int> v(N);
     srand(7);
     for (int i=0;i<v.size();i++) v[i]=rand() % 1000000;
+    //for (int i=0;i<v.size();i++) v[i]=i;
 
     for (int i=0; i<5; i++) printf("%d\n",v[i]);
-    v.msort();
+    v.insertion_sort();
     for (int i=0; i<5; i++) printf("%d\n",v[i]);
+    printf("is_sorted = %d\n", v.is_sorted());
+}
+
+void test_search() {
+    const int N = 5;
+    vec<int> v(N);
+    for (int i=0;i<N;i++) v[i]=i*2;
+    int x=5;
+    try {
+        v.search(x);
+    }
+    catch (const char *err) {
+        puts (err);
+    }
 }
 
 int main() {
-    /*
+
     sub1();
     putchar(10);
     sub2();
@@ -88,7 +117,12 @@ int main() {
     putchar(10);
     trev();
     putchar(10);
-    */
-    mmsort();
+    test_insertion_sort();
+    putchar(10);
+    test_mergesort(); // 0.186
+    putchar(10);
+
+    test_search();
+    putchar(10);
     return 0;
 }
