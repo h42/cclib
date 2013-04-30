@@ -18,7 +18,9 @@ public:
     int insert(void *key, int klen, void *value, int vlen);
     int update(void *key, int klen, void *value, int vlen);
     void *get(void *key, int klen);
-
+    int remove(void *key, int klen);
+    int reorg();
+    void sync();
     int zrc;
     datum zdatum;
 private:
@@ -27,6 +29,22 @@ private:
 
 #endif
 //ccinclude
+
+void jdbm::sync() {
+    gdbm_sync(zdb);
+}
+
+int jdbm::reorg() {
+    return zrc = gdbm_reorganize(zdb);
+}
+
+int jdbm::remove(void *key, int klen) {
+    datum k;
+    k.dptr=(char *)key;
+    k.dsize=klen;
+    zrc=gdbm_delete (zdb, k);
+    return zrc;
+}
 
 void * jdbm::get(void *key, int klen) {
     datum k;

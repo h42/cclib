@@ -14,10 +14,18 @@ int main() {
         rc=db.insert(key, strlen(key)+1, value,strlen(value)+1);
         if (rc) fprintf(stderr,"insert failed; i=%d\n",i);
     }
+
+    sprintf(key,"key %d",5);
+    rc=db.remove(key, strlen(key)+1);
+    printf("remove rc = %d\n",rc);
+
     for (i=0;i<10;i++) {
         sprintf(key,"key %d",i);
         char *dptr=(char *)db.get(key,strlen(key)+1);
-        if (!dptr) break;
+        if (!dptr) {
+            printf("record %d is missing\n",i);
+            continue;
+        }
         puts(dptr);
     }
     return 0;
