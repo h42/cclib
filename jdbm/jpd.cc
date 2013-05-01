@@ -28,5 +28,12 @@ int main() {
         }
         puts(dptr);
     }
+
+    char *buf=(char *)db.first();
+    puts("");
+    while (buf) {
+        puts(buf);
+        buf=(char *)db.next();
+    }
     return 0;
 }

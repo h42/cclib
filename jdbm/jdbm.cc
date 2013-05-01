@@ -1,14 +1,17 @@
-#include <gdbm.h>
 #include <malloc.h>
+
 //ccinclude
-#ifndef _STR_H
-#define _STR_H
+#ifndef _JDBM_H
+#define _JDBM_H
+
 #ifndef _GDBM_H
 #include <gdbm.h>
 #endif
 
 typedef unsigned char uchar;
 typedef const char cchar;
+
+#define safefree(d) {if (d.dptr) {free(d.dptr); d.dptr=0;}}
 
 class jdbm {
 public:
@@ -17,14 +20,18 @@ public:
     void close();
     int insert(void *key, int klen, void *value, int vlen);
     int update(void *key, int klen, void *value, int vlen);
+    void *get();
     void *get(void *key, int klen);
     int remove(void *key, int klen);
+    void * first();
+    void * next();
     int reorg();
     void sync();
     int zrc;
-    datum zdatum;
+
 private:
     GDBM_FILE zdb;
+    datum zkey,zvalue;
 };
 
 #endif
@@ -38,6 +45,22 @@ int jdbm::reorg() {
     return zrc = gdbm_reorganize(zdb);
 }
 
+void * jdbm::first() {
+    safefree(zkey);
+    zkey = gdbm_firstkey(zdb);
+    if (!zkey.dptr) return 0;
+    return get();
+}
+
+void * jdbm::next() {
+    void * d = zkey.dptr;
+    if (!d) return 0;
+    zkey = gdbm_nextkey(zdb,zkey);
+    free(d);
+    if (!zkey.dptr) return 0;
+    return get();
+}
+
 int jdbm::remove(void *key, int klen) {
     datum k;
     k.dptr=(char *)key;
@@ -46,13 +69,17 @@ int jdbm::remove(void *key, int klen) {
     return zrc;
 }
 
+void * jdbm::get() {
+    return get(zkey.dptr,zkey.dsize);
+}
+
 void * jdbm::get(void *key, int klen) {
     datum k;
     k.dptr=(char *)key;
     k.dsize=klen;
-    if (zdatum.dptr) free(zdatum.dptr);
-    zdatum=gdbm_fetch (zdb, k);
-    return zdatum.dptr;
+    safefree(zvalue);
+    zvalue=gdbm_fetch (zdb, k);
+    return zvalue.dptr;
 }
 
 int jdbm::update(void *key, int klen, void *value, int vlen) {
@@ -77,10 +104,8 @@ int jdbm::insert(void *key, int klen, void *value, int vlen) {
 
 void jdbm::close() {
     if (zdb) {
-        if (zdatum.dptr) {
-            free(zdatum.dptr);
-            zdatum.dptr=0;
-        }
+        safefree(zkey);
+        safefree(zvalue);
         gdbm_close (zdb);
         zdb=0;
     }
@@ -93,7 +118,7 @@ int jdbm::open(cchar *fn, cchar *cflags, int mode=640) {
     else if (cflags[0]=='n') flags=GDBM_NEWDB;  //always new
     else if (cflags[0]=='c') flags=GDBM_WRCREAT;  //creat if necessary
     if (cflags[1]=='s') flags |= GDBM_SYNC;
-    zdatum.dptr=0;
+    zkey.dptr=zvalue.dptr=0;
     zdb = gdbm_open(fn, 1024, flags, mode, 0);
     return zdb ? 0 : -1;
 }
