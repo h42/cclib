@@ -16,22 +16,23 @@ typedef const char cchar;
 class jdbm {
 public:
     ~jdbm() {close();};
-    int open(cchar *fn, cchar *cflags, int mode);
-    void close();
-    int insert(void *key, int klen, void *value, int vlen);
-    int update(void *key, int klen, void *value, int vlen);
-    void *get();
-    void *get(void *key, int klen);
-    int remove(void *key, int klen);
+    int    open(cchar *fn, cchar *cflags, int mode);
+    void   close();
+    int    insert(void *key, int klen, void *value, int vlen);
+    int    update(void *key, int klen, void *value, int vlen);
+    void * get();
+    void * get(void *key, int klen);
+    int    get_errno() {return gdbm_errno;}
+    int    remove(void *key, int klen);
     void * first();
     void * next();
-    int reorg();
-    void sync();
-    int zrc;
+    int    reorg();
+    void   sync();
 
 private:
     GDBM_FILE zdb;
     datum zkey,zvalue;
+    int zerrno;
 };
 
 #endif
@@ -42,7 +43,7 @@ void jdbm::sync() {
 }
 
 int jdbm::reorg() {
-    return zrc = gdbm_reorganize(zdb);
+    return gdbm_reorganize(zdb);
 }
 
 void * jdbm::first() {
@@ -65,8 +66,7 @@ int jdbm::remove(void *key, int klen) {
     datum k;
     k.dptr=(char *)key;
     k.dsize=klen;
-    zrc=gdbm_delete (zdb, k);
-    return zrc;
+    return gdbm_delete (zdb, k);
 }
 
 void * jdbm::get() {
@@ -88,8 +88,7 @@ int jdbm::update(void *key, int klen, void *value, int vlen) {
     k.dsize=klen;
     v.dptr=(char *) value;
     v.dsize=vlen;
-    zrc=gdbm_store (zdb, k, v, GDBM_REPLACE);
-    return zrc ? -1 : 0;
+    return gdbm_store (zdb, k, v, GDBM_REPLACE);
 }
 
 int jdbm::insert(void *key, int klen, void *value, int vlen) {
@@ -98,8 +97,7 @@ int jdbm::insert(void *key, int klen, void *value, int vlen) {
     k.dsize=klen;
     v.dptr=(char *) value;
     v.dsize=vlen;
-    zrc=gdbm_store (zdb, k, v, GDBM_INSERT);
-    return zrc ? -1 : 0;
+    return gdbm_store (zdb, k, v, GDBM_INSERT); //+1 instead of -1 for existing record
 }
 
 void jdbm::close() {
