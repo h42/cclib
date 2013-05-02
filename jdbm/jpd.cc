@@ -8,7 +8,7 @@ int main() {
     int i,rc;
     char key[256],value[256];
     rc = db.open("temp.jdbm","n",0660);
-    for (i=0;i<10;i++) {
+    for (i=0;i<100000;i++) {
         sprintf(key,"key %d",i);
         sprintf(value,"value %d",i);
         rc=db.insert(key, strlen(key)+1, value,strlen(value)+1);
@@ -31,7 +31,8 @@ int main() {
 
     char *buf=(char *)db.first();
     puts("");
-    while (buf) {
+    i=100;
+    while (buf && ++i<110) {
         puts(buf);
         buf=(char *)db.next();
     }

@@ -23,7 +23,7 @@ class jfile {
     public:
 	jfile(const char *fn=0,const char *mode=0);
 	~jfile(void) {close();};
-	int open(char *fn,int flags=O_RDONLY,int mode=0664);
+        int open(const char *fn,int flags=O_RDONLY,int mode=0664);
 	int close();
 	int gets(str &);
 	int puts(str &);
@@ -64,7 +64,7 @@ jfile::jfile(const char *ifn, const char *mode) {
 //
 // OPEN / CLOSE
 //
-int jfile::open(char *fn,int flags,int mode) {
+int jfile::open(const char *fn,int flags,int mode) {
     if (fd>=0) close();
     fd=::open(fn,flags,mode);
     p1=p2=-1;

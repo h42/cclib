@@ -9,7 +9,8 @@ typedef unsigned int uint;
 
 int main() {
     str s;
-    jfile f=jfile("/etc/passwd");
+    jfile f;
+    f.open("/etc/passwd");
     while (f.gets(s)>0) {
         s.display();
     }

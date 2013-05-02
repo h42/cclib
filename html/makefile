@@ -2,19 +2,16 @@
 CPPFLAGS=-g -Wall -I ../lib -L ../lib
 
 PROGS=jpd html
-#OBJS=jfile.o
 
 .PHONY: ALL
 
 ALL:$(OBJS) $(PROGS)
 
-jfile.o:jfile.cc jfile.h
-	awkinc <jfile.cc >jfile.h
-	g++ -Wall -g -c jfile.cc -ojfile.o
-jfile_t:jfile_t.cc jfile.o jstring.o
-
 jpd:jpd.cc
 	g++ $(CPPFLAGS) jpd.cc -lmy -ojpd
+
+html:html.cc
+	g++ $(CPPFLAGS) html.cc -lmy -ohtml
 
 lexer:lexer.cc jstring.o jvec.cc
 	g++ -Wall -g lexer.cc jstring.o -olexer

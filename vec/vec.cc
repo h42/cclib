@@ -34,8 +34,6 @@ private:
     T *zv;
     int zsize,zsp;
 };
-#endif
-//ccinclude
 
 template <class T>
 vec<T>::~vec() {
@@ -210,3 +208,6 @@ int vec<T>::search(T &x, int n) {
     }
     throw("Search failed");
 }
+
+#endif
+//ccinclude
