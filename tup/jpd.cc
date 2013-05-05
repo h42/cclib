@@ -12,7 +12,11 @@ void t2() {
     t.snd().display();
     t.fst()=17;
     printf("fst=%d\n",t.fst());
-    printf("fst=%d\n",t.fst());
+
+    tup<int,str> t2;
+    t2.fst()=12;
+    t2.snd()="we're number two";
+    printf("fst=%d 2nd=%s\n",t2.fst(),t2.snd().cstr());
 }
 
 int main() {

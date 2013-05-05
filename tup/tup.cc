@@ -6,6 +6,7 @@
 template <class T, class T2>
 class tup {
 public:
+    tup() {}
     tup(T t, T2 t2) : zt(t) ,zt2(t2) {}
     T &fst();
     T2 &snd();
