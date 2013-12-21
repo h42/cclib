@@ -6,7 +6,7 @@ PROGS=jsockc jsocks jftp demon jntp
 all:$(PROGS)
 
 jsock.o jsock.h:jsock.cc
-	ccinc <jsock.cc >jsock.h
+	awkinc <jsock.cc >jsock.h
 	g++ -c $(CPPFLAGS) jsock.cc
 
 jsockc:jsock.o jsock_c.cc
@@ -20,7 +20,7 @@ jntp:jsock.o jntp.cc
 
 ## JFTP
 jftp.o jftp.h:jftp.cc
-	ccinc <jftp.cc >jftp.h
+	awkinc <jftp.cc >jftp.h
 	g++ -c $(CPPFLAGS) jftp.cc
 
 jftp:jftp.o jftp_t.cc jsock.o

@@ -81,13 +81,14 @@ int jftp::get_resp(int timeout) {
 }
 
 int jftp::cmd_pasv() {
-	unsigned int daddr;
+        //unsigned int daddr;
 	short dport;
 	char zdotaddr[20];
 	int rc,resp,state,p1,i,c,sd;
 	int num[6]={0,0,0,0,0,0};
 	snprintf(obuf,sizeof(obuf),"PASV\r\n");
 	rc=sk.write(obuf,strlen(obuf));
+        if (rc<0) return rc;
 	resp=get_resp(10);
 	if (resp != 227) {
 		if (!zquiet) fprintf(stderr,
@@ -115,7 +116,7 @@ int jftp::cmd_pasv() {
 		fprintf(stderr,"unable to parse -  %s\n",ibuf);
 		return -1;
 	}
-	daddr=(num[0]<<24)+(num[1]<<16)+(num[2]<<8)+num[3];
+        //daddr=(num[0]<<24)+(num[1]<<16)+(num[2]<<8)+num[3];
 	dport=(num[4]<<8)+num[5];
 	sprintf(zdotaddr,"%d.%d.%d.%d",num[0],num[1],num[2],num[3]);
 	if ((sd=sk2.open_client(zdotaddr,dport))<0) {
@@ -188,10 +189,10 @@ int jftp::cmd_user(const char *user, const char *pw) {
 }
 
 int jftp::cmd_x(const char *fmt,...) {
-	int rc,n;
+        int rc;
 	va_list ap;
 	va_start(ap, fmt);
-	n = vsnprintf(obuf, sizeof(obuf), fmt, ap);
+        vsnprintf(obuf, sizeof(obuf), fmt, ap);
 	va_end(ap);
 	int l = strlen(obuf);
 	if (l < 2 || memcmp(&obuf[l-2], "\r\n", 2))
@@ -309,19 +310,18 @@ int jftp::ls(const char *parms, const char *fn) {
 }
 
 int jftp::put(const char *fn, const char *fn2) {
-	int rc;
-	if (!fn2) {
-		int p1=0;
-		for (int i = 0;; i++) {
-			if (!fn[i]) break;
-			if (fn[i] == '/') p1 = i+1;
-		}
-		fn2 = &fn[p1];
-	}
-	if (!zquiet) fprintf(stderr, "Storing %s as %s\n",fn, fn2);
-	rc = cmd_pasv();
-	rc = cmd_x("TYPE I\r\n");
-	return cmd_stor(fn, fn2);
+    if (!fn2) {
+        int p1=0;
+        for (int i = 0;; i++) {
+                if (!fn[i]) break;
+                if (fn[i] == '/') p1 = i+1;
+        }
+        fn2 = &fn[p1];
+    }
+    if (!zquiet) fprintf(stderr, "Storing %s as %s\n",fn, fn2);
+    cmd_pasv();
+    cmd_x("TYPE I\r\n");
+    return cmd_stor(fn, fn2);
 }
 
 int jftp::pwd() {

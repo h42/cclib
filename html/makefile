@@ -8,7 +8,7 @@ PROGS=jpd html
 ALL:$(OBJS) $(PROGS)
 
 jpd:jpd.cc
-	g++ $(CPPFLAGS) jpd.cc -lmy -ojpd
+	g++ $(CPPFLAGS)  jpd.cc -lmy -ojpd
 
 html:html.cc
 	g++ $(CPPFLAGS) html.cc -lmy -ohtml

@@ -15,9 +15,12 @@ int main() {
     jsock js;
     js.open_client("time.nist.gov",13);
     int rc=js.read(buf,sizeof(buf));
+    if (rc<=0) {
+        fprintf(stderr,"read failed\n");
+        return 8;
+    }
     puts(buf);
     // 56361 13-03-10 02:47:11 51 0 0 806.2 UTC(NIST) *
-    int i,l=strlen(buf);
     mkts(dt,buf,7,8);
     mkts(tm,buf,16,8);
     mkts(yr,dt,0);

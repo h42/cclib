@@ -1,4 +1,4 @@
-CPPFLAGS=-g -Wall -I .
+CPPFLAGS=-g -Wall -I . -static
 CC=g++
 
 CLASS=jdbm

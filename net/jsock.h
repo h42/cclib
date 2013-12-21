@@ -18,8 +18,9 @@ public:
     int   read(char *buf,int len);
     int   run(int port,int (*callback)(jsock&));
     int   sd(int x=-1);
+    void  sync();
     int   timeout(int x);
-    int   write(char *buf,int len);
+    int   write(const char *buf,int len);
 private:
     int zsd,zasd;
     int zserver;

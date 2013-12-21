@@ -19,4 +19,4 @@ install:$(OBJS)
 	ar -t libmy.a
 	install -v -ojerry -gjerry libmy.a /usr/local/lib
 	install -d -v /usr/local/include/my
-	install -v -ojerry -gjerry $(INCS) /usr/local/include/my
+	install -ojerry -gjerry $(INCS) /usr/local/include/my

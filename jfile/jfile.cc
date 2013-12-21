@@ -11,7 +11,7 @@
 #define _JFILE_H
 
 #ifndef _STR_H
-#include <my/str.h>
+#include "my/str.h"
 #endif
 
 #include <fcntl.h>

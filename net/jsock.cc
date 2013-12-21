@@ -37,8 +37,9 @@ public:
     int   read(char *buf,int len);
     int   run(int port,int (*callback)(jsock&));
     int   sd(int x=-1);
+    void  sync();
     int   timeout(int x);
-    int   write(char *buf,int len);
+    int   write(const char *buf,int len);
 private:
     int zsd,zasd;
     int zserver;
@@ -54,6 +55,11 @@ int jsock::sd(int x) {
     if (x>=0) zsd=x;
     else x=zsd;
     return x;
+}
+
+void  jsock::sync() {
+    if (zsd<0) return;
+    syncfs(zsd);
 }
 
 jsock::jsock() {
@@ -155,6 +161,7 @@ int jsock::run(int port,int (*callback)(jsock&)) {
 	    break;
 	}
 	if (rc==0) {
+            ::close(zsd); //listen socket
 	    zsd = sd;
 	    rc=(callback)(*this);
 	    exit(rc);
@@ -199,7 +206,7 @@ int jsock::read(char *buf,int len) {
     return JSOCK_TIMEOUT;
 }
 
-int jsock::write(char *buf,int len) {
+int jsock::write(const char *buf,int len) {
     int rc,p1=0,etime;
     struct timeval tv0,tv1;
     struct pollfd pfd;

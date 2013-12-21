@@ -108,7 +108,7 @@ void vec<T>::sp(T x) {
 
 template <class T>
 void vec<T>::push(T &x) {
-    if (zsp > zsize) grow();
+    if (zsp >= zsize) grow();
     zv[zsp++]=x;
 }
 

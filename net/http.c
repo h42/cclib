@@ -91,7 +91,7 @@
 ** Configure the server by setting the following macros and recompiling.
 */
 #ifndef DEFAULT_PORT
-#define DEFAULT_PORT "80"
+#define DEFAULT_PORT "8080"
 #endif
 #ifndef MAX_CONTENT_LENGTH
 #define MAX_CONTENT_LENGTH 9000000

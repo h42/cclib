@@ -108,7 +108,7 @@ void vec<T>::sp(T x) {
 
 template <class T>
 void vec<T>::push(T &x) {
-    if (zsp > zsize) grow();
+    if (zsp >= zsize) grow();
     zv[zsp++]=x;
 }
 
@@ -171,7 +171,8 @@ void vec<T>::merge_sort(T *b, int l, int r) {
 template <class T>
 void vec<T>::insertion_sort(int l, int r) {
     if (r==0) r=zsize-1;
-    int i,j,t;
+    int i,j;
+    T t;
     for (i=l+1;i<=r;i++) {
 	t=zv[i];
 	for (j=i-1;j>=l;j--) {

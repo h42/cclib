@@ -30,8 +30,9 @@ int sub1() {
 class xxx {
 public:
     int x,y,z;
-    xxx() { puts("contructing xxx"); x=0; y=0; z=0; }
-    ~xxx() { puts("deconstructing"); }
+    char *zbuf;
+    xxx() { puts("contructing xxx"); x=0; y=0; z=0; zbuf=(char *)malloc(80);}
+    ~xxx() { puts("deconstructing"); free(zbuf); }
     void inc(int i) { x+=i; y+=i; z+=i; }
 };
 
@@ -109,6 +110,8 @@ void test_search() {
 
 int main() {
 
+    sub2();
+/*
     sub1();
     putchar(10);
     sub2();
@@ -123,6 +126,7 @@ int main() {
     putchar(10);
 
     test_search();
+*/
     putchar(10);
     return 0;
 }

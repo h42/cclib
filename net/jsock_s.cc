@@ -21,10 +21,36 @@ int myfunc(jsock &js) {
 	return 0;
 }
 
+
+int client(jsock &js) {
+    const char *msg=
+        "HTTP/1.1 200 OK\n"
+        "Connection: close\n"
+        "Content-type: text/html; charset=utf-8\n\n"
+
+	"<!DOCTYPE HTML>\n"
+	"<html>\n"
+	"<head>\n"
+	"<meta http_equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n"
+	"<title>\n"
+	"Test Page\n"
+	"</title>\n"
+
+	"</head>\n"
+	"<body>\n"
+	"<h2>Hey Now!</h2>\n"
+	"</body>\n"
+	"</html>\n"
+       ;
+    js.read(buf,sizeof(buf)-1);
+    js.write(msg, strlen(msg));
+    //js.sync();
+    return 0;
+}
+
 int main() {
-	int rc;
 	remove("test.log");
 	jsock js;
-	rc=js.run(4242,myfunc);
+        js.run(8080,client);
 	return 0;
 }

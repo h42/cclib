@@ -11,8 +11,7 @@
 #include "jftp.h"
 
 int main(int argc,char **argv) {
-	int rc, bigrc;
-
+        int rc;
 	// CONNECT
 	jftp ftp1;
 
@@ -25,11 +24,11 @@ int main(int argc,char **argv) {
 	return 0;
 	*/
 
-	bigrc = ftp1.connect("jld2.com", "kbswinge", 0);
+        ftp1.connect("jld2.com", "kbswinge", 0);
 	ftp1.zquiet=0; // set to 0 for response - 1 to eliminate responses
 	rc = ftp1.ll("");
-	rc = ftp1.quit();
-	return 0;
+        rc = ftp1.quit();
+        return rc;
 
 
 	rc = ftp1.help();
