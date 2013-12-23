@@ -31,9 +31,9 @@ jftp:jftp.o jftp_t.cc jsock.o
 
 ## INSTALL
 install:jsock.o
-	mkdir -p ../lib
-	cp -av jsock.h ../lib/jsock.h
-	cp -av jsock.o ../lib/jsock.o
+	mkdir -p ../my
+	cp -av jsock.h ../my/jsock.h
+	cp -av jsock.o ../my/jsock.o
 
 clean:
 	-rm *.o $(PROGS)

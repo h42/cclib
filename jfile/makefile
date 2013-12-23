@@ -21,7 +21,7 @@ $(CLASS).o:$(CLASS).cc
 	g++ -c $(CPPFLAGS) $(CLASS).cc -o $(CLASS).o
 
 install:
-	install -m644 $(CLASS).cc ../lib
+	install -m644 $(CLASS).cc ../my
 
 clean:
 	-rm *.o $(PROGS)

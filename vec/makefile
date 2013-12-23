@@ -21,7 +21,7 @@ sort:sort.cc
 	g++ $(CPPFLAGS) sort.cc -osort
 
 install:
-	install -m644 $(CLASS).cc ../lib
+	install -m644 $(CLASS).cc ../my
 
 clean:
 	-rm *.o $(PROGS)

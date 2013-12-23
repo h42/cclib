@@ -33,6 +33,10 @@ public:
     str &copy(const char *s);
     str &operator=(const str &s);
     str &operator=(const char *s);
+    bool operator<(const str &str1);
+    bool operator<(const char *str1);
+    bool operator>=(const str &str1);
+    bool operator>=(const char *str1);
     str operator+(char c);
     str operator+(const str &s2);
     char operator[](int);
@@ -198,6 +202,22 @@ str &str::operator=(const char *str1) {
     memcpy(zbuf,str1,l+1);
     zlen=l;
     return *this;
+}
+
+bool str::operator<(const char *str1) {
+    return  strcmp(zbuf,str1) < 0 ;
+}
+
+bool str::operator>=(const str &str1) {
+    return  strcmp(zbuf,str1.zbuf) >= 0 ;
+}
+
+bool str::operator>=(const char *str1) {
+    return  strcmp(zbuf,str1) >= 0 ;
+}
+
+bool str::operator<(const str &str1) {
+    return  strcmp(zbuf,str1.zbuf) < 0 ;
 }
 
 str str::operator+(const str &s2) {
