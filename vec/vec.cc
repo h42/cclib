@@ -23,7 +23,7 @@ public:
     void push(T &x);
     T & pop();
     int sp();
-    void sp(T);
+    void sp(int);
     // ALGORITHMS
     void insertion_sort(int l=0, int r=0);
     bool is_sorted(int l=0, int r=0);
@@ -61,7 +61,7 @@ vec<T>::vec(int x) {
 template <class T>
 void vec<T>::grow(int x) {
     if (x<=0) {
-	if (zsize<=0) x=2;
+        if (zsize<=0) x=1;
 	else x=zsize*2;
     }
     if (zsize>=x) return;
@@ -102,7 +102,7 @@ int vec<T>::sp() {
 }
 
 template <class T>
-void vec<T>::sp(T x) {
+void vec<T>::sp(int x) {
     zsp=x;
 }
 
@@ -147,7 +147,7 @@ void vec<T>::merge_sort(T *b, int l, int r) {
     }
 
     if (r<=l) return; // required for straight merge_sort - insertion_sort opt negates need
-    if (r<=16) return insertion_sort(l,r);
+    //if (r<=16) return insertion_sort(l,r);
 
     m = (r + l) / 2;
     merge_sort(b, l, m);
