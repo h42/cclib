@@ -5,7 +5,7 @@ PROGS=jsockc jsocks http jftp demon jntp
 
 all:$(PROGS)
 
-http: http.cc jsock.o
+http: http.cc jsock.h jsock.o
 	g++ $(CPPFLAGS)  -o http  http.cc jsock.o  -l my
 
 jsock.o jsock.h:jsock.cc
