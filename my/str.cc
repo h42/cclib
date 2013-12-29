@@ -21,16 +21,20 @@ public:
     str(const str &s);
     ~str();
     int center(int x=0);
-    char *cstr() {return zbuf;};
-    void display() {::puts(zbuf);}
-    void log() {::printf("len=%d size=%d buf=%s\n",zlen,zsize,zbuf);}
-    int find(const char *str,int x=0,int icase=0);
-    void grow(int l);
-    int  length() {return zlen;};
+    int change(const char *,int x=0,int l1=0,int l2=0);
+    int compare(const str &s, int len);
+    int compare(const char *s, int len);
     str &concat(const str &s);
     str &concat(char c);
     str &copy(const str &s);
     str &copy(const char *s);
+    char *cstr() {return zbuf;};
+    void display() {::puts(zbuf);}
+    int find(const char *str,int x=0,int icase=0);
+    int format(const char *fmt,...);
+    void grow(int l);
+    int  length() {return zlen;};
+    void log() {::printf("len=%d size=%d buf=%s\n",zlen,zsize,zbuf);}
     str &operator=(const str &s);
     str &operator=(const char *s);
     bool operator==(const str &str1);
@@ -49,8 +53,6 @@ public:
     str operator+(const str &s2);
     char operator[](int);
     friend str operator+(const char *s,const str &s1);
-    int format(const char *fmt,...);
-    int change(const char *,int x=0,int l1=0,int l2=0);
     int trim(int x=3);
     int triml() {return trim(1);}
     int trimr() {return trim(2);}
@@ -103,6 +105,18 @@ str::~str() {
 	free(zbuf);
 	zbuf=0;
     }
+}
+
+/////////////
+// COMPARE
+/////////////
+int str::compare(const str &s, int len) {
+    if (len <= 0) return strcmp(zbuf,s.zbuf);
+    return memcmp(zbuf, s.zbuf, len);
+}
+
+int str::compare(const char *s, int len) {
+    return memcmp(zbuf, s, len);
 }
 
 //////////////

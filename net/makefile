@@ -1,7 +1,7 @@
 CPPFLAGS=-g -Wall
 CC=g++
 
-PROGS=jsockc jsocks http jftp demon jntp
+PROGS=jsockc jsocks jftp demon jntp
 
 all:$(PROGS)
 
@@ -32,8 +32,7 @@ jftp:jftp.o jftp_t.cc jsock.o
 ## INSTALL
 install:jsock.o
 	mkdir -p ../my
-	cp -av jsock.h ../my/jsock.h
-	cp -av jsock.o ../my/jsock.o
+	cp -av jsock.cc ../my/
 
 clean:
 	-rm *.o $(PROGS)

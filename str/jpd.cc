@@ -17,8 +17,15 @@ void t2() {
     s.display();
 }
 
+void t3() {
+    str s="123456", s2="123456";
+    puts ( s!=s2 ? "true" : "false");
+    //puts ( s<"123456 " ? "true" : "false");
+}
+
 int main() {
     //t1();
-    t2();
+    //t2();
+    t3();
     return 0;
 }
