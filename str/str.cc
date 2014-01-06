@@ -20,6 +20,7 @@ public:
     str(const int ilen=0);
     str(const str &s);
     ~str();
+    str &append(char c);
     int center(int x=0);
     int change(const char *,int x=0,int l1=0,int l2=0);
     int compare(const str &s, int len);
@@ -49,7 +50,6 @@ public:
     bool operator>=(const char *str1);
     bool operator>(const str &str1);
     bool operator>(const char *str1);
-    str operator+(char c);
     str operator+(const str &s2);
     char operator[](int);
     friend str operator+(const char *s,const str &s1);
@@ -287,7 +287,7 @@ str str::operator+(const str &s2) {
     return s0;
 }
 
-str str::operator+(char c) {
+str &str::append(char c) {
     int l=zlen+1;
     if (zsize<l+1) grow(zsize*2);
     if (zsize<l+1) return *this;

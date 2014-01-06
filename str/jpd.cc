@@ -19,6 +19,7 @@ void t2() {
 
 void t3() {
     str s="123456", s2="123456";
+    (s+'q').display();
     puts ( s!=s2 ? "true" : "false");
     //puts ( s<"123456 " ? "true" : "false");
 }
