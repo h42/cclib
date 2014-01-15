@@ -4,8 +4,11 @@
 #include "jfile.h"
 
 int main() {
+    jfile f3("/etc/group");
+    const char *buf=f3.getFile();
+    if (buf) puts(buf);
+    /*
     str s;
-    jfile f1("/etc/passwd");
     while (f1.gets(s)>0) {
 	puts(s.cstr());
     }
@@ -13,5 +16,6 @@ int main() {
     f2.puts("Hey now!\n");
     f2.close();
     system("cat temp");
+    */
     return 0;
 }

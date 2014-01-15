@@ -22,22 +22,22 @@ class parse {
 public:
     parse(const char *s="");
     void reset(const char *s);
+    bool eod() {return (zbuf[zp1]==0) ? true : false;}
     bool eol();
-    bool getany(str s, int count=1);
+    bool any(str s, int count=1);
     bool getchar(char x, str s, int count=1);
     bool getint(int *);
-    bool getline(str &s);
-    bool getqstr(str &s);
-    bool getuntil(int (*)(int), str &s);
-    bool getword(str &s);
-    bool getwhile(int (*)(int), str &s);
+    bool line(str &s);
+    bool qstr(str &s);
+    bool takeUntil(int (*)(int), str &s);
+    bool word(str &s);
+    bool takeWhile(int (*)(int), str &s);
     bool lines(vec<str> &v);
     bool spaces();
     bool words(vec<str> &v);
 private:
     const char *zbuf;
     int zp1;
-    bool eod;
 };
 
 const int EOD = -99;
@@ -54,7 +54,7 @@ void parse::reset(const char *s) {
     zp1=0;
 }
 
-bool parse::getany(str s, int len) {
+bool parse::any(str s, int len) {
     if (zbuf[zp1]==0) return false;
     s="";
     if (len==1)  s.append(zbuf[zp1++]);
@@ -68,6 +68,16 @@ bool parse::getany(str s, int len) {
         else s.append(c);
     }
     return true;
+}
+
+bool parse::eol() {
+    int c=zbuf[zp1];
+    if (c==10 || c==13) {
+        zp1++;
+         if (c==13 && zbuf[zp1] == 10) zp1++;
+        return true;
+    }
+    return false;
 }
 
 bool parse::getchar(char x, str s, int len) {
@@ -93,16 +103,6 @@ bool parse::getchar(char x, str s, int len) {
     return  (i>0) ? true : false ;
 }
 
-bool parse::eol() {
-    int c=zbuf[zp1];
-    if (c==10 || c==13) {
-        zp1++;
-         if (c==13 && zbuf[zp1+1] == 10) zp1++;
-        return true;
-    }
-    return false;
-}
-
 bool parse::getint(int *ii) {
     int i,rc;
     *ii=0;
@@ -116,7 +116,7 @@ bool parse::getint(int *ii) {
     return (rc>0) ? true : false;
 }
 
-bool parse::getline(str &s) { //get from cur pos to eol
+bool parse::line(str &s) { //get from cur pos to eol
     int i,c;
     if (zbuf[zp1]==0) return false;
     s="";
@@ -132,7 +132,7 @@ bool parse::getline(str &s) { //get from cur pos to eol
     return true; // should not get here
 }
 
-bool parse::getqstr(str &s) {
+bool parse::qstr(str &s) {
     if (zbuf[zp1]==0) return false;
     int i,c;
     s="";
@@ -147,7 +147,7 @@ bool parse::getqstr(str &s) {
     return true;
 }
 
-bool parse::getuntil(int (*func)(int), str &s) {
+bool parse::takeUntil(int (*func)(int), str &s) {
     int i,c;
     s="";
     if (zbuf[zp1]==0) return false;
@@ -160,7 +160,7 @@ bool parse::getuntil(int (*func)(int), str &s) {
     return true;
 }
 
-bool parse::getwhile(int (*func)(int), str &s) {
+bool parse::takeWhile(int (*func)(int), str &s) {
     int i,c;
     if (zbuf[zp1]==0) return false;
     s="";
@@ -173,7 +173,7 @@ bool parse::getwhile(int (*func)(int), str &s) {
     return true;
 }
 
-bool parse::getword(str &s) {
+bool parse::word(str &s) {
     if (zbuf[zp1]==0) return false;
     int i,c,rc;
     s="";
@@ -191,7 +191,7 @@ bool parse::lines(vec<str> &v) {
     if (zbuf[zp1]==0) return false;
     str s;
     v.sp(0);
-    while (getline(s)) v.push(s);
+    while (line(s)) v.push(s);
     return true;
 }
 
@@ -208,7 +208,7 @@ bool parse::words(vec<str> &v) {
     if (zbuf[zp1]==0) return false;
     v.sp(0);
     spaces();
-    while (getword(s)) {
+    while (word(s)) {
         v.push(s);
         spaces();
     }

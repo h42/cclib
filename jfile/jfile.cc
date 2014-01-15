@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <malloc.h>
 #include <stdarg.h>
 
@@ -21,10 +23,11 @@ class jfile {
 	char *buf,*buf2;
 	int  fd,size,size2,p1,p2;
     public:
-	jfile(const char *fn=0,const char *mode=0);
+        jfile(const char *fn=0,const char *mode=0);
 	~jfile(void) {close();};
         int open(const char *fn,int flags=O_RDONLY,int mode=0664);
-	int close();
+        int close();
+        const char *getFile();
 	int gets(str &);
 	int puts(str &);
 	int puts(const char *s);
@@ -83,6 +86,17 @@ int jfile::close() {
 //
 // PUTS / GETS
 //
+const char *jfile::getFile() {
+    struct stat st;
+    int rc = fstat(fd,&st);
+    if (rc<0) return 0;
+    size = st.st_size;
+    jgrow((void **)&buf,&size);
+    if (!buf) return 0;
+    rc=read(buf,size);
+    return (rc==size) ? buf : 0;
+}
+
 int jfile::puts(str &s) {
     int l=s.length(),rc;
     char nl=10;
@@ -150,9 +164,10 @@ int jfile::printf(char *fmt,...) {
 //
 // READ / WRITE
 //
-/*int jfile::read() {
+int jfile::read() {
+
     return 0;
-}*/
+}
 
 inline int jfile::read(char *ibuf,int ilen) {
     return (fd>=0) ? ::read(fd,ibuf,ilen) : -1;

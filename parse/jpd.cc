@@ -26,7 +26,7 @@ void test4() {
     vec<str> v;
     while(1) {
         if (state==0) {
-            rc=p.getline(s);
+            rc=p.line(s);
             if (rc<0) return;
             if (s.length()==0) {
                 state=2;
@@ -40,7 +40,7 @@ void test4() {
                 printf("got len - %s\n", v[1].cstr());
         }
         else if (state==2) {
-            rc=p.getline(s);
+            rc=p.line(s);
             s.display();
             return;
         }
@@ -55,18 +55,18 @@ void test1() {
     printf("rc=%d i=%d\n",rc,i);
     rc=p1.spaces();
     printf("rc=%d\n",rc);
-    rc=p1.getword(s);
+    rc=p1.word(s);
     printf("rc=%d s=%s\n",rc,s.cstr());
     rc=p1.spaces();
     printf("rc=%d\n",rc);
-    rc=p1.getword(s);
+    rc=p1.word(s);
     printf("rc=%d s=%s\n",rc,s.cstr());
 
     p1.reset("the time is now");
-    rc=p1.getuntil(isspace,s);
+    rc=p1.takeUntil(isspace,s);
     printf("rc=%d s=%s\n",rc,s.cstr());
-    rc=p1.getwhile(isspace,s);
-    rc=p1.getuntil(isspace,s);
+    rc=p1.takeWhile(isspace,s);
+    rc=p1.takeUntil(isspace,s);
     printf("rc=%d s=%s\n",rc,s.cstr());
 }
 
@@ -75,13 +75,13 @@ void test2() {
     str s;
     const char * h="GET /form?q=123 HTTP/1.1";
     parse p1(h);
-    p1.getword(s);
+    p1.word(s);
     s.display();
     p1.spaces();
-    p1.getword(s);
+    p1.word(s);
     s.display();
     p1.spaces();
-    p1.getword(s);
+    p1.word(s);
     s.display();
 
     puts("");
@@ -97,7 +97,7 @@ void test3() {
     parse p(xxx);
     int rc=0;
     while (rc>=0) {
-        rc=p.getline(s);
+        rc=p.line(s);
         s.display();
     }
 

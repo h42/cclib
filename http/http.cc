@@ -19,7 +19,6 @@ const char *msg=
     "<title>\n"
     "Test Page\n"
     "</title>\n"
-
     "</head>\n"
     "<body>\n"
     "<h2>Hey Now!</h2>\n"
@@ -27,16 +26,29 @@ const char *msg=
     "</html>\n"
    ;
 
-char buf[4096];
-str zfn(256), zop(20), zquery(256);
+char *root = "/www";
 
 int client(jsock &js) {
+char buf[4096];
     js.read(buf,sizeof(buf)-1);
-    parse p(buf);
-    vec<str> v;
-    p.words(v);
-    v[0].display();
     puts(buf);
+    parse p(buf);
+    str s, iop, ifn, iver;
+    int rc,state=0;
+    rc=p.word(iop);  p.spaces();
+    rc=p.word(ifn);  p.spaces();
+    rc=p.word(iver);
+    rc=p.eol();
+    while(!p.eod()) {
+        rc=p.line(s);
+        s.display();
+        if (s.length()==0) break;
+    }
+
+    if (iop == "GET") {
+        str ofn;
+    }
+
     js.write(msg, strlen(msg));
     //js.sync();
     return 0;
