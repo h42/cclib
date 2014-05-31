@@ -1,8 +1,8 @@
 CPPFLAGS=-g -Wall -I .
 CC=g++
 
-OBJS=vec.o str.o tup.o jfile.o jdbm.o parse.o logger.o jsock.o
-INCS=str.h vec.h tup.h jfile.h jdbm.h parse.h logger.h jsock.h
+OBJS=vec.o str.o tup.o jfile.o jdbm.o parse.o logger.o jsock.o jpopen.o
+INCS=str.h vec.h tup.h jfile.h jdbm.h parse.h logger.h jsock.h jpopen.h
 
 %.o : %.cc
 	awkinc < $<  > $(@:.o=.h)
