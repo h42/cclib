@@ -44,6 +44,7 @@ int sub2() {
     }
     try {
 	for (i=0;i<cnt+1;i++) {
+            printf("v1[%d]=%d %d %d\n", i, v1.get(i).x, v1[i].y, v1[i].z);
 	    printf("v1[%d]=%d %d %d\n", i, v1[i].x, v1[i].y, v1[i].z);
 	}
     }
@@ -56,7 +57,7 @@ int sub2() {
 
 void sub3() {
     vec<int> iv;
-    iv.grow(32);
+    iv.resize(32);
     printf("sub3 size=%d\n",iv.size());
 }
 

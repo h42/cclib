@@ -14,16 +14,13 @@ public:
     vec<T>();
     vec<T>(int n);
     ~vec();
-    void grow(int x=0);
+    void resize(int x=0);
     T& get(int x);
     void put(T &v,int x);
     T& operator[](int x);
     int size() {return zsize;};
     // STACK STUF
     void push(T &x);
-    T & pop();
-    int sp();
-    void sp(int);
     // ALGORITHMS
     void insertion_sort(int l=0, int r=0);
     bool is_sorted(int l=0, int r=0);
@@ -32,7 +29,7 @@ public:
     int search(T &x, int n=0);
 private:
     T *zv;
-    int zsize,zsp;
+    int zsize,zcap;
 };
 
 template <class T>
@@ -45,34 +42,31 @@ vec<T>::~vec() {
 
 template <class T>
 vec<T>::vec() {
-    zsp=0;
-    zsize=0;
+    zsize=zcap=0;
     zv=0;
 }
 
 template <class T>
 vec<T>::vec(int x) {
-    zsize=x;
-    zsp=0;
+    zcap=zsize=x;
     zv = (T *) malloc(x*sizeof(T));
     for (int i=0;i<x;i++) new(zv+i) T();
 }
 
 template <class T>
-void vec<T>::grow(int x) {
-    if (x<=0) {
-        if (zsize<=0) x=1;
-	else x=zsize*2;
+void vec<T>::resize(int x) {
+    if (zcap>=x) {
+        zsize=x;
+        return;
     }
-    if (zsize>=x) return;
 
     T* buf2;
     if (zv) buf2 = (T *)realloc(zv,x*sizeof(T));
     else buf2 = (T *)malloc(x*sizeof(T));
 
     zv=buf2;
-    for (int i=zsize;i<x;i++) new(zv+i) T();
-    zsize=x;
+    for (int i=zcap;i<x;i++) new(zv+i) T();
+    zcap=zsize=x;
 }
 
 template <class T>
@@ -83,7 +77,6 @@ T& vec<T>::get(int x) {
 
 template <class T>
 T& vec<T>::operator[](int x) {
-    if (x<0 || x>=zsize) throw "subscript out of bounds";
     return zv[x];
 }
 
@@ -93,30 +86,10 @@ void vec<T>::put(T &v,int x) {
     zv[x]=v;
 }
 
-//
-// STACK
-//
-template <class T>
-int vec<T>::sp() {
-    return zsp;
-}
-
-template <class T>
-void vec<T>::sp(int x) {
-    zsp=x;
-}
-
 template <class T>
 void vec<T>::push(T &x) {
-    if (zsp >= zsize) grow();
-    zv[zsp++]=x;
-}
-
-template <class T>
-T &vec<T>::pop() {
-    --zsp;
-    if (zsp<0) throw "Stack underflow";
-    return zv[--zsp];
+    resize(zsize+1);
+    zv[zsize-1]=x;
 }
 
 //

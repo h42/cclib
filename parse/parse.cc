@@ -190,7 +190,7 @@ bool parse::word(str &s) {
 bool parse::lines(vec<str> &v) {
     if (zbuf[zp1]==0) return false;
     str s;
-    v.sp(0);
+    v.resize(0);
     while (line(s)) v.push(s);
     return true;
 }
@@ -206,7 +206,7 @@ bool parse::spaces() {
 bool parse::words(vec<str> &v) {
     str s;
     if (zbuf[zp1]==0) return false;
-    v.sp(0);
+    v.resize(0);
     spaces();
     while (word(s)) {
         v.push(s);
