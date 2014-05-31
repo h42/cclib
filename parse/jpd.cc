@@ -35,7 +35,7 @@ void test4() {
             p2.reset(s.cstr()); // CAREFUL s.cstr() pointer can be reallocate and go bad"
             printf("len=%d state=%d - %s\n", s.length(), state, s.cstr());
             p2.words(v);
-            if (v.sp()<2) continue;
+            if (v.size()<2) continue;
             if (memcmp (v[0].cstr(),"Content-Len",11)==0)
                 printf("got len - %s\n", v[1].cstr());
         }
@@ -86,10 +86,10 @@ void test2() {
 
     puts("");
     vec<str> v;
-    v.sp(0);
+    v.resize(0);
     p1.reset(h);
     p1.words(v);
-    for (int i=0; i<v.sp(); i++) v[i].display();
+    for (int i=0; i<v.size(); i++) v[i].display();
 }
 
 void test3() {
@@ -105,7 +105,7 @@ void test3() {
     p.reset(xxx);
     vec<str> v;
     p.lines(v);
-    for (int i=0; i<v.sp(); i++) {
+    for (int i=0; i<v.size(); i++) {
         v[i].display();
     }
 }
