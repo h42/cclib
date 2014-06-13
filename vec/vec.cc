@@ -14,13 +14,15 @@ public:
     vec<T>();
     vec<T>(int n);
     ~vec();
-    void resize(int x=0);
-    T& get(int x);
+    int  capacity() {return zcap;};
+    T&   get(int x);
     void put(T &v,int x);
-    T& operator[](int x);
-    int size() {return zsize;};
-    // STACK STUF
     void push(T &x);
+    void resize(int x=0);
+    int  size() {return zsize;};
+    T&   operator[](int x);
+    vec<T>&   operator=(const vec&);
+    bool operator==(const vec&);
     // ALGORITHMS
     void insertion_sort(int l=0, int r=0);
     bool is_sorted(int l=0, int r=0);
@@ -54,29 +56,8 @@ vec<T>::vec(int x) {
 }
 
 template <class T>
-void vec<T>::resize(int x) {
-    if (zcap>=x) {
-        zsize=x;
-        return;
-    }
-
-    T* buf2;
-    if (zv) buf2 = (T *)realloc(zv,x*sizeof(T));
-    else buf2 = (T *)malloc(x*sizeof(T));
-
-    zv=buf2;
-    for (int i=zcap;i<x;i++) new(zv+i) T();
-    zcap=zsize=x;
-}
-
-template <class T>
 T& vec<T>::get(int x) {
     if (x<0 || x>=zsize) throw "subscript out of bounds";
-    return zv[x];
-}
-
-template <class T>
-T& vec<T>::operator[](int x) {
     return zv[x];
 }
 
@@ -90,6 +71,44 @@ template <class T>
 void vec<T>::push(T &x) {
     resize(zsize+1);
     zv[zsize-1]=x;
+}
+
+template <class T>
+void vec<T>::resize(int x) {
+    if (zcap>=x) {
+        zsize=x;
+        return;
+    }
+
+    T* buf2;
+    int ocap=zcap;
+    if (zv) {
+        if (2*zcap >= x) zcap*=2;
+        buf2 = (T *)realloc(zv,zcap*sizeof(T));
+    }
+    else buf2 = (T *)malloc((zcap=x)*sizeof(T));
+    zv=buf2;
+    for (int i=ocap;i<zcap;i++) new(zv+i) T();
+    zsize=x;
+}
+
+template <class T>
+T& vec<T>::operator[](int x) {
+    return zv[x];
+}
+
+template <class T>
+vec<T>& vec<T>::operator=(const vec<T>& t) {
+    resize(t.zsize);
+    for (int i=0; i<zsize; i++) zv[i] = t.zv[i];
+    return *this;
+}
+
+template <class T>
+bool vec<T>::operator==(const vec<T>& t) {
+    if (zsize != t.zsize) return false;
+    for (int i=0; i<zsize; i++) if (zv[i] != t.zv[i]) return false;
+    return true;
 }
 
 //

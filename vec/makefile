@@ -1,4 +1,4 @@
-CPPFLAGS=-O2 -g -Wall -I .
+CPPFLAGS= -g -Wall -I .
 CC=g++
 
 CLASS=vec

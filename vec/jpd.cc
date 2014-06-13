@@ -45,7 +45,7 @@ int sub2() {
     try {
 	for (i=0;i<cnt+1;i++) {
             printf("v1[%d]=%d %d %d\n", i, v1.get(i).x, v1[i].y, v1[i].z);
-	    printf("v1[%d]=%d %d %d\n", i, v1[i].x, v1[i].y, v1[i].z);
+            printf("v1[%d]=%d %d %d\n", i, v1[i].x, v1[i].y, v1[i].z);
 	}
     }
     catch (const char *msg) {
@@ -109,25 +109,28 @@ void test_search() {
     }
 }
 
+class yyy {
+    public:
+    int x;
+    yyy& update(int ix) {
+        x=ix; return *this;
+    }
+};
+
+void testoper() {
+    int i,n=5;
+    vec<yyy> v1,v2,v3;
+    yyy y;
+    for (i=0;i<n;i++) {
+        v1.push(y.update(i*2));
+    }
+    v2=v1;
+    for (i=0;i<v2.size();i++) printf("%d\n",v2[i].x);
+    if (!(v2==v1));
+}
+
 int main() {
-
-    sub2();
-/*
-    sub1();
-    putchar(10);
-    sub2();
-    putchar(10);
-    sub3();
-    putchar(10);
-    trev();
-    putchar(10);
-    test_insertion_sort();
-    putchar(10);
-    test_mergesort(); // 0.186
-    putchar(10);
-
-    test_search();
-*/
-    putchar(10);
+    //sub2();
+    testoper();
     return 0;
 }

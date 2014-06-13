@@ -1,4 +1,4 @@
-CPPFLAGS=-g -Wall -I .
+CPPFLAGS=-O2 -g -Wall -I .
 CC=g++
 
 OBJS=vec.o str.o tup.o jfile.o jdbm.o parse.o logger.o jsock.o jpopen.o
